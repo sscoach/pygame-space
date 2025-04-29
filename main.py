@@ -7,7 +7,7 @@ from constants import *
 
 print("Startup")
 pygame.init()
-pygame.key.set_repeat(500, 500)
+pygame.key.set_repeat(100, 100)
 surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
@@ -23,15 +23,22 @@ for y in range(2):  # y: 0, 1
 
 while True:
 
-    print("Update")
+    # print("Update")
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             print("Shutdown")
             pygame.quit()
             exit()
             break
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                fighter.x = fighter.x - 10
+            if event.key == pygame.K_RIGHT:
+                fighter.x = fighter.x + 10
 
-    print("Render")
+
+
+    # print("Render")
     surface.fill((0, 0, 0))
     fighter.draw(surface)
 
