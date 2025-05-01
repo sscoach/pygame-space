@@ -32,11 +32,17 @@ while True:
             break
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                fighter.x = fighter.x - 10
+                fighter.direction = -1
             if event.key == pygame.K_RIGHT:
-                fighter.x = fighter.x + 10
+                fighter.direction = +1
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                fighter.direction = 0
+            if event.key == pygame.K_RIGHT:
+                fighter.direction = 0
 
-
+    delta_seconds = clock.tick(FPS) / 1000
+    fighter.update(delta_seconds)
 
     # print("Render")
     surface.fill((0, 0, 0))
@@ -46,5 +52,5 @@ while True:
         alien.draw(surface)
 
     pygame.display.update()
-    clock.tick(FPS)
+
 
