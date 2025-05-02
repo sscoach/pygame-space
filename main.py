@@ -44,6 +44,16 @@ while True:
     delta_seconds = clock.tick(FPS) / 1000
     fighter.update(delta_seconds)
 
+    for alien in aliens:
+        alien.update(delta_seconds)
+
+    if Alien.should_change_direction:
+        Alien.should_change_direction = False
+
+        for alien in aliens:
+            alien.direction *= -1
+            alien.y += 50
+
     # print("Render")
     surface.fill((0, 0, 0))
     fighter.draw(surface)
