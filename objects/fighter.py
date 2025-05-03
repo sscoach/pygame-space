@@ -1,22 +1,10 @@
-import pygame
 from constants import *
+from objects.object import Object
 
 
-class Fighter:
+class Fighter(Object):
     def __init__(self):
-        image = pygame.image.load("assets/images/fighter.png")
-        self.scale_up_image = pygame.transform.scale(
-            image,
-            (image.get_width() * 2, image.get_height() * 2)
-        )
-        self.x = SCREEN_WIDTH / 2 - self.scale_up_image.get_width() / 2
-        self.y = SCREEN_HEIGHT - self.scale_up_image.get_height() - 10
+        super().__init__("assets/images/fighter.png")
 
-        self.speed = 200
-        self.direction = 0
-
-    def update(self, delta_seconds):
-        self.x = self.x + self.speed * self.direction * delta_seconds
-
-    def draw(self, surface):
-        surface.blit(self.scale_up_image, (self.x, self.y))
+        self.x = SCREEN_WIDTH / 2 - self.image.get_width() / 2
+        self.y = SCREEN_HEIGHT - self.image.get_height() - 10

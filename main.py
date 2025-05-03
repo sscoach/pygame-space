@@ -52,7 +52,7 @@ while True:
 
         for alien in aliens:
             alien.direction *= -1
-            alien.y += 50
+            alien.move(0, 50)
 
     # print("Render")
     surface.fill((0, 0, 0))
