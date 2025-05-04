@@ -33,14 +33,14 @@ while True:
             break
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                fighter.direction = -1
+                fighter.direction_x = -1
             if event.key == pygame.K_RIGHT:
-                fighter.direction = +1
+                fighter.direction_x = +1
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
-                fighter.direction = 0
+                fighter.direction_x = 0
             if event.key == pygame.K_RIGHT:
-                fighter.direction = 0
+                fighter.direction_x = 0
 
     delta_seconds = clock.tick(FPS) / 1000
     fighter.update(delta_seconds)
@@ -52,7 +52,7 @@ while True:
         Alien.should_change_direction = False
 
         for alien in aliens:
-            alien.direction *= -1
+            alien.direction_x *= -1
             alien.move(0, 50)
 
     # print("Render")
