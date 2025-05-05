@@ -22,6 +22,7 @@ for y in range(2):  # y: 0, 1
         aliens.append(alien)
         alien.x = 70 + 50 * x
         alien.y = 100 + 70 * y
+bombs = []
 
 while True:
 
@@ -58,6 +59,15 @@ while True:
     for alien in aliens:
         alien.update(delta_seconds)
 
+        bomb = alien.shoot()
+        if bomb:
+            bombs.append(bomb)
+
+    for bomb in bombs:
+        bomb.update(delta_seconds)
+        if SCREEN_HEIGHT < bomb.y:
+            bombs.remove(bomb)
+
     if Alien.should_change_direction:
         Alien.should_change_direction = False
 
@@ -73,6 +83,9 @@ while True:
 
     for alien in aliens:
         alien.draw(surface)
+
+    for bomb in bombs:
+        bomb.draw(surface)
 
     pygame.display.update()
 
