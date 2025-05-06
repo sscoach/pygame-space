@@ -72,6 +72,13 @@ while True:
         if bomb:
             bombs.append(bomb)
 
+        if alien.check_collision([fighter]):
+            explosions.append(Explosion(fighter.rect))
+            explosions.append(Explosion(alien.rect))
+            aliens.remove(alien)
+            print("Game Over")
+            break
+
     for bomb in bombs:
         bomb.update(delta_seconds)
         if SCREEN_HEIGHT < bomb.y:
