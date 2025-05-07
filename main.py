@@ -27,6 +27,10 @@ bombs = []
 
 explosions = []
 
+shoot_sound = pygame.mixer.Sound("assets/sounds/shoot.wav")
+invaderkilled_sound = pygame.mixer.Sound("assets/sounds/invaderkilled.wav")
+explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
+
 while True:
 
     # print("Update")
@@ -45,6 +49,7 @@ while True:
             if event.key == pygame.K_SPACE:
                 if beam is None:
                     beam = Beam(fighter.x + fighter.image.get_width()/2, fighter.y)
+                    shoot_sound.play()
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
@@ -64,6 +69,7 @@ while True:
                 explosions.append(Explosion(alien.rect))
                 aliens.remove(alien)
                 beam = None
+                invaderkilled_sound.play()
 
     for alien in aliens:
         alien.update(delta_seconds)
@@ -76,6 +82,7 @@ while True:
             explosions.append(Explosion(fighter.rect))
             explosions.append(Explosion(alien.rect))
             aliens.remove(alien)
+            explosion_sound.play()
             print("Game Over")
             break
 
@@ -87,6 +94,7 @@ while True:
             if bomb.check_collision([fighter]):
                 explosions.append(Explosion(fighter.rect))
                 bombs.remove(bomb)
+                explosion_sound.play()
                 print("Game Over")
                 break
 
