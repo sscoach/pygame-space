@@ -30,6 +30,9 @@ explosions = []
 shoot_sound = pygame.mixer.Sound("assets/sounds/shoot.wav")
 invaderkilled_sound = pygame.mixer.Sound("assets/sounds/invaderkilled.wav")
 explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
+shoot_sound.set_volume(0.05)
+invaderkilled_sound.set_volume(0.05)
+explosion_sound.set_volume(0.05)
 
 while True:
 
