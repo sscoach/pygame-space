@@ -9,12 +9,12 @@ from constants import *
 
 print("Startup")
 pygame.init()
-pygame.key.set_repeat(100, 100)
+pygame.key.set_repeat(500, 300)
 surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
 fighter = Fighter()
-beam = None
+beams = []
 
 aliens = []
 for y in range(2):  # y: 0, 1
@@ -50,8 +50,9 @@ while True:
             if event.key == pygame.K_RIGHT:
                 fighter.direction_x = +1
             if event.key == pygame.K_SPACE:
-                if beam is None:
+                if len(beams) < 2:
                     beam = Beam(fighter.x + fighter.image.get_width()/2, fighter.y)
+                    beams.append(beam)
                     shoot_sound.play()
 
         if event.type == pygame.KEYUP:
@@ -62,16 +63,16 @@ while True:
 
     delta_seconds = clock.tick(FPS) / 1000
     fighter.update(delta_seconds)
-    if beam:
+    for beam in beams:
         beam.update(delta_seconds)
         if beam.y < 0:
-            beam = None
+            beams.remove(beam)
         else:
             alien = beam.check_collision(aliens)
             if alien:
                 explosions.append(Explosion(alien.rect))
                 aliens.remove(alien)
-                beam = None
+                beams.remove(beam)
                 invaderkilled_sound.play()
 
     for alien in aliens:
@@ -116,7 +117,7 @@ while True:
     # print("Render")
     surface.fill((0, 0, 0))
     fighter.draw(surface)
-    if beam:
+    for beam in beams:
         beam.draw(surface)
 
     for alien in aliens:
