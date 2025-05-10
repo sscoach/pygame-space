@@ -8,6 +8,8 @@ from objects.explosion import Explosion
 from constants import *
 from scenes.base_scene import BaseScene
 
+from scene_manager import SceneManager
+
 
 class GameScene(BaseScene):
     def __init__(self):
@@ -69,6 +71,10 @@ class GameScene(BaseScene):
                     self.beams.remove(beam)
                     self.invaderkilled_sound.play()
 
+                    if len(self.aliens) == 0:
+                        print("Game Clear")
+                        SceneManager.instance.change("game_over")
+
         for alien in self.aliens:
             alien.update(delta_seconds)
 
@@ -82,6 +88,7 @@ class GameScene(BaseScene):
                 self.aliens.remove(alien)
                 self.explosion_sound.play()
                 print("Game Over")
+                SceneManager.instance.change("game_over")
                 break
 
         for bomb in self.bombs:
@@ -94,6 +101,7 @@ class GameScene(BaseScene):
                     self.bombs.remove(bomb)
                     self.explosion_sound.play()
                     print("Game Over")
+                    SceneManager.instance.change("game_over")
                     break
 
         for explosion in self.explosions:
