@@ -5,6 +5,8 @@ from objects.fighter import Fighter
 from objects.beam import Beam
 from objects.explosion import Explosion
 from scenes.game_scene import GameScene
+from scenes.home_scene import HomeScene
+from scenes.game_over_scene import GameOverScene
 from constants import *
 
 print("Startup")
@@ -13,7 +15,7 @@ pygame.key.set_repeat(500, 300)
 surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
-scene = GameScene()
+scene = GameOverScene()
 scene.on_begin()
 
 while True:
