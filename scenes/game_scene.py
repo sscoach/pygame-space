@@ -13,18 +13,10 @@ from scene_manager import SceneManager
 
 class GameScene(BaseScene):
     def __init__(self):
-        self.fighter = Fighter()
+        self.fighter = None
         self.beams = []
-
         self.aliens = []
-        for y in range(2):  # y: 0, 1
-            for x in range(3):  # x: 0, 1, 2
-                alien = Alien()
-                self.aliens.append(alien)
-                alien.x = 70 + 50 * x
-                alien.y = 100 + 70 * y
         self.bombs = []
-
         self.explosions = []
 
         self.shoot_sound = pygame.mixer.Sound("assets/sounds/shoot.wav")
@@ -35,10 +27,20 @@ class GameScene(BaseScene):
         self.explosion_sound.set_volume(0.05)
 
     def on_begin(self):
-        pass
+        self.fighter = Fighter()
+        for y in range(2):  # y: 0, 1
+            for x in range(3):  # x: 0, 1, 2
+                alien = Alien()
+                self.aliens.append(alien)
+                alien.x = 70 + 50 * x
+                alien.y = 100 + 70 * y
 
     def on_end(self):
-        pass
+        self.fighter = None
+        self.beams.clear()
+        self.aliens.clear()
+        self.bombs.clear()
+        self.explosions.clear()
 
     def on_key_down(self, key):
         if key == pygame.K_LEFT:
