@@ -1,6 +1,7 @@
 import pygame
 
 from objects.alien import Alien
+from objects.bunker import Bunker
 from objects.fighter import Fighter
 from objects.beam import Beam
 from objects.explosion import Explosion
@@ -21,6 +22,7 @@ class GameScene(BaseScene):
         self.ufo_timer = 0
         self.bombs = []
         self.explosions = []
+        self.bunkers = []
 
         self.shoot_sound = pygame.mixer.Sound("assets/sounds/shoot.wav")
         self.invaderkilled_sound = pygame.mixer.Sound("assets/sounds/invaderkilled.wav")
@@ -48,6 +50,12 @@ class GameScene(BaseScene):
                 alien.x = 70 + 50 * x
                 alien.y = 100 + 70 * y
 
+        for x in range(3):
+            bunker = Bunker()
+            bunker.x = 50 + SCREEN_WIDTH / 3 * x
+            bunker.y = SCREEN_HEIGHT - bunker.rect.height * 2 - self.fighter.rect.height
+            self.bunkers.append(bunker)
+
     def on_end(self):
         self.fighter = None
         self.beams.clear()
@@ -55,6 +63,7 @@ class GameScene(BaseScene):
         self.ufos.clear()
         self.bombs.clear()
         self.explosions.clear()
+        self.bunkers.clear()
 
     def on_key_down(self, key):
         if key == pygame.K_LEFT:
@@ -143,6 +152,9 @@ class GameScene(BaseScene):
             if explosion.is_finished():
                 self.explosions.remove(explosion)
 
+        for bunker in self.bunkers:
+            bunker.update(delta_seconds)
+
         if Alien.should_change_direction:
             Alien.should_change_direction = False
 
@@ -166,6 +178,9 @@ class GameScene(BaseScene):
 
         for ufo in self.ufos:
             ufo.draw(surface)
+
+        for bunker in self.bunkers:
+            bunker.draw(surface)
 
         for bomb in self.bombs:
             bomb.draw(surface)
