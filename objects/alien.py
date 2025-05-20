@@ -12,6 +12,8 @@ class Alien(Object):
 
         self.speed = 100
         self.direction_x = 1
+        self.score = 50
+        self.bonus_score = 50
 
     def update(self, delta_seconds):
         super().update(delta_seconds)

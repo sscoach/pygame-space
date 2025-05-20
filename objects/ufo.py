@@ -10,3 +10,6 @@ class Ufo(Object):
 
         self.x = 0
         self.y = 50
+
+        self.score = 1000
+        self.bonus_score = 500

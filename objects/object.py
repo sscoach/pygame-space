@@ -15,6 +15,9 @@ class Object:
         self.direction_x = 0
         self.direction_y = 0
 
+        self.score = 0
+        self.bonus_score = 0
+
     @property
     def rect(self):
         return pygame.Rect(self.x, self.y, self.image.get_width(), self.image.get_height())

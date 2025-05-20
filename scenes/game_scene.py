@@ -87,9 +87,9 @@ class GameScene(BaseScene):
                         self.ufos.remove(target)
                     self.beams.remove(beam)
                     self.invaderkilled_sound.play()
-                    self.score += 50
+                    self.score += target.score
                     if self.miss_fire_count == 0:
-                        self.score += 50
+                        self.score += target.bonus_score
                     self.miss_fire_count = 0
 
                     if len(self.aliens) == 0:
