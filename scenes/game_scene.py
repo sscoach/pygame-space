@@ -25,9 +25,13 @@ class GameScene(BaseScene):
         self.shoot_sound = pygame.mixer.Sound("assets/sounds/shoot.wav")
         self.invaderkilled_sound = pygame.mixer.Sound("assets/sounds/invaderkilled.wav")
         self.explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
+        self.ufo_sound = pygame.mixer.Sound("assets/sounds/ufo_lowpitch.wav")
+        self.ufo_killed_sound = pygame.mixer.Sound("assets/sounds/ufo_highpitch.wav")
         self.shoot_sound.set_volume(0.05)
         self.invaderkilled_sound.set_volume(0.05)
         self.explosion_sound.set_volume(0.05)
+        self.ufo_sound.set_volume(0.05)
+        self.ufo_killed_sound.set_volume(0.05)
         self.score = 0
         self.miss_fire_count = 0
 
@@ -81,16 +85,14 @@ class GameScene(BaseScene):
                 target = beam.check_collision(self.aliens + self.ufos)
                 if target:
                     self.explosions.append(Explosion(target.rect))
-                    if self.aliens.count(target) == 1:
+                    if target in self.aliens:
                         self.aliens.remove(target)
-                    if self.ufos.count(target) == 1:
+                        self.invaderkilled_sound.play()
+                    if target in self.ufos:
                         self.ufos.remove(target)
+                        self.ufo_killed_sound.play()
                     self.beams.remove(beam)
-                    self.invaderkilled_sound.play()
-                    self.score += target.score
-                    if self.miss_fire_count == 0:
-                        self.score += target.bonus_score
-                    self.miss_fire_count = 0
+                    self.add_score(target)
 
                     if len(self.aliens) == 0:
                         print("Game Clear")
@@ -113,12 +115,15 @@ class GameScene(BaseScene):
                 break
 
         self.ufo_timer += delta_seconds
-        if self.ufo_timer > 3:
+        if self.ufo_timer > 10:
             self.ufo_timer = 0
             self.ufos.append(Ufo())
+            self.ufo_sound.play()
 
         for ufo in self.ufos:
             ufo.update(delta_seconds)
+            if SCREEN_WIDTH < ufo.x:
+                self.ufos.remove(ufo)
 
         for bomb in self.bombs:
             bomb.update(delta_seconds)
@@ -144,6 +149,12 @@ class GameScene(BaseScene):
             for target in self.aliens:
                 target.direction_x *= -1
                 target.move(0, 50)
+
+    def add_score(self, target):
+        self.score += target.score
+        if self.miss_fire_count == 0:
+            self.score += target.bonus_score
+        self.miss_fire_count = 0
 
     def on_render(self, surface):
         self.fighter.draw(surface)
