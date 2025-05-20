@@ -1,6 +1,6 @@
 class BaseScene:
 
-    def on_begin(self):
+    def on_begin(self, **kwargs):
         pass
 
     def on_end(self):

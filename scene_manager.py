@@ -11,10 +11,10 @@ class SceneManager:
             self.scene = scene
             self.scene.on_begin()
 
-    def change(self, name):
+    def change(self, name, **kwargs):
         self.scene.on_end()
         self.scene = self.scenes[name]
-        self.scene.on_begin()
+        self.scene.on_begin(**kwargs)
 
 
 SceneManager.instance = SceneManager()

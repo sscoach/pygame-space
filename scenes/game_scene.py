@@ -86,7 +86,7 @@ class GameScene(BaseScene):
 
                     if len(self.aliens) == 0:
                         print("Game Clear")
-                        SceneManager.instance.change("game_over")
+                        SceneManager.instance.change("game_over", score=self.score)
 
         for alien in self.aliens:
             alien.update(delta_seconds)
@@ -101,7 +101,7 @@ class GameScene(BaseScene):
                 self.aliens.remove(alien)
                 self.explosion_sound.play()
                 print("Game Over")
-                SceneManager.instance.change("game_over")
+                SceneManager.instance.change("game_over", score=self.score)
                 break
 
         for bomb in self.bombs:
@@ -114,7 +114,7 @@ class GameScene(BaseScene):
                     self.bombs.remove(bomb)
                     self.explosion_sound.play()
                     print("Game Over")
-                    SceneManager.instance.change("game_over")
+                    SceneManager.instance.change("game_over", score=self.score)
                     break
 
         for explosion in self.explosions:
@@ -147,4 +147,3 @@ class GameScene(BaseScene):
         text = self.score_font.render(f"Score: {self.score}", True, (255, 255, 0))
         text_rect = text.get_rect(center=(surface.get_width() / 2, 20))
         surface.blit(text, text_rect)
-
