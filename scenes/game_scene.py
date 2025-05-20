@@ -107,6 +107,10 @@ class GameScene(BaseScene):
                         print("Game Clear")
                         SceneManager.instance.change("game_over", score=self.score)
 
+                target = beam.check_collision(self.bunkers)
+                if target:
+                    self.beams.remove(beam)
+
         for target in self.aliens:
             target.update(delta_seconds)
 
@@ -139,6 +143,11 @@ class GameScene(BaseScene):
             if SCREEN_HEIGHT < bomb.y:
                 self.bombs.remove(bomb)
             else:
+                bunker = bomb.check_collision(self.bunkers)
+                if bunker:
+                    self.bombs.remove(bomb)
+                    continue
+
                 if bomb.check_collision([self.fighter]):
                     self.explosions.append(Explosion(self.fighter.rect))
                     self.bombs.remove(bomb)
@@ -146,6 +155,7 @@ class GameScene(BaseScene):
                     print("Game Over")
                     SceneManager.instance.change("game_over", score=self.score)
                     break
+
 
         for explosion in self.explosions:
             explosion.update(delta_seconds)
