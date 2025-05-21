@@ -109,6 +109,7 @@ class GameScene(BaseScene):
 
                 target = beam.check_collision(self.bunkers)
                 if target:
+                    target.hit(beam)
                     self.beams.remove(beam)
 
         for target in self.aliens:
@@ -145,6 +146,7 @@ class GameScene(BaseScene):
             else:
                 bunker = bomb.check_collision(self.bunkers)
                 if bunker:
+                    bunker.hit(bomb)
                     self.bombs.remove(bomb)
                     continue
 
