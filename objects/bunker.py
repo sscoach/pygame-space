@@ -18,3 +18,6 @@ class Bunker(Object):
         green_blue = 255 / 10
         color_sub = (0, green_blue, green_blue)
         self.image.fill(color_sub, special_flags=pygame.BLEND_SUB)
+
+    def is_broken(self):
+        return self.hp <= 0

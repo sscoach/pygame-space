@@ -158,7 +158,6 @@ class GameScene(BaseScene):
                     SceneManager.instance.change("game_over", score=self.score)
                     break
 
-
         for explosion in self.explosions:
             explosion.update(delta_seconds)
             if explosion.is_finished():
@@ -166,6 +165,8 @@ class GameScene(BaseScene):
 
         for bunker in self.bunkers:
             bunker.update(delta_seconds)
+            if bunker.is_broken():
+                self.bunkers.remove(bunker)
 
         if Alien.should_change_direction:
             Alien.should_change_direction = False
