@@ -9,15 +9,12 @@ class Bunker(Object):
 
         self.hp = 10
 
-    def hit(self, obj):
+    def hit(self):
         self.hp -= 1
 
-    def draw(self, surface):
-        others = 255 - int((10 - self.hp) * (255 / 10))
-        print(f"others: {others}")
-        color = (255, others, others, 255)
-        print(f'color {color}')
-        colored_image = self.image.copy()
+        self.make_red()
 
-        colored_image.fill(color, special_flags=pygame.BLEND_RGBA_MULT)
-        surface.blit(colored_image, (self.x, self.y))
+    def make_red(self):
+        green_blue = 255 / 10
+        color_sub = (0, green_blue, green_blue)
+        self.image.fill(color_sub, special_flags=pygame.BLEND_SUB)
