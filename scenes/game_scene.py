@@ -30,7 +30,7 @@ class GameScene(BaseScene):
         self.score = 0
 
 
-    def on_begin(self):
+    def on_begin(self, **kwargs):
         self.fighter = Fighter()
         for y in range(2):  # y: 0, 1
             for x in range(3):  # x: 0, 1, 2
@@ -84,7 +84,7 @@ class GameScene(BaseScene):
 
                     if len(self.aliens) == 0:
                         print("Game Clear")
-                        SceneManager.instance.change("game_over")
+                        SceneManager.instance.change("game_over", score=self.score)
 
         for alien in self.aliens:
             alien.update(delta_seconds)
@@ -99,7 +99,7 @@ class GameScene(BaseScene):
                 self.aliens.remove(alien)
                 self.explosion_sound.play()
                 print("Game Over")
-                SceneManager.instance.change("game_over")
+                SceneManager.instance.change("game_over", score=self.score)
                 break
 
         for bomb in self.bombs:
@@ -112,7 +112,7 @@ class GameScene(BaseScene):
                     self.bombs.remove(bomb)
                     self.explosion_sound.play()
                     print("Game Over")
-                    SceneManager.instance.change("game_over")
+                    SceneManager.instance.change("game_over", score=self.score)
                     break
 
         for explosion in self.explosions:
