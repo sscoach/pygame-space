@@ -26,6 +26,10 @@ class GameScene(BaseScene):
         self.invaderkilled_sound.set_volume(0.05)
         self.explosion_sound.set_volume(0.05)
 
+        self.score_font = pygame.font.Font(None, 30)
+        self.score = 0
+
+
     def on_begin(self):
         self.fighter = Fighter()
         for y in range(2):  # y: 0, 1
@@ -65,6 +69,8 @@ class GameScene(BaseScene):
             beam.update(delta_seconds)
             if beam.y < 0:
                 self.beams.remove(beam)
+                self.score -= 1
+                print('score', self.score)
             else:
                 alien = beam.check_collision(self.aliens)
                 if alien:
@@ -72,6 +78,9 @@ class GameScene(BaseScene):
                     self.aliens.remove(alien)
                     self.beams.remove(beam)
                     self.invaderkilled_sound.play()
+
+                    self.score += 50
+                    print('score', self.score)
 
                     if len(self.aliens) == 0:
                         print("Game Clear")
@@ -131,3 +140,7 @@ class GameScene(BaseScene):
 
         for explosion in self.explosions:
             explosion.draw(surface)
+
+        text = self.score_font.render(f"Score: {self.score}", True, (255, 255, 0))
+        text_rect = text.get_rect(center=(surface.get_width() / 2, 15))
+        surface.blit(text, text_rect)
