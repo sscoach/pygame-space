@@ -1,6 +1,7 @@
 import pygame
 
 from objects.alien import Alien
+from objects.ufo import Ufo
 from objects.fighter import Fighter
 from objects.beam import Beam
 from objects.explosion import Explosion
@@ -16,6 +17,7 @@ class GameScene(BaseScene):
         self.fighter = None
         self.beams = []
         self.aliens = []
+        self.ufos = []
         self.bombs = []
         self.explosions = []
 
@@ -46,6 +48,7 @@ class GameScene(BaseScene):
         self.fighter = None
         self.beams.clear()
         self.aliens.clear()
+        self.ufos.clear()
         self.bombs.clear()
         self.explosions.clear()
 
@@ -105,6 +108,17 @@ class GameScene(BaseScene):
                 SceneManager.instance.change("game_over", score=self.score)
                 break
 
+        for ufo in self.ufos:
+            ufo.update(delta_seconds)
+
+        self.ufo_timer += delta_seconds
+        if 10 < self.ufo_timer:
+            self.ufo_timer = 0
+            ufo = Ufo()
+            ufo.x = 0
+            ufo.y = 100
+            self.ufos.append(ufo)
+
         for bomb in self.bombs:
             bomb.update(delta_seconds)
             if SCREEN_HEIGHT < bomb.y:
@@ -130,10 +144,6 @@ class GameScene(BaseScene):
                 alien.direction_x *= -1
                 alien.move(0, 50)
 
-        self.ufo_timer += delta_seconds
-        if 10 < self.ufo_timer:
-            self.ufo_timer = 0
-            print('ufo show')
 
     def on_render(self, surface):
         self.fighter.draw(surface)
@@ -142,6 +152,9 @@ class GameScene(BaseScene):
 
         for alien in self.aliens:
             alien.draw(surface)
+
+        for ufo in self.ufos:
+            ufo.draw(surface)
 
         for bomb in self.bombs:
             bomb.draw(surface)
