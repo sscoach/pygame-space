@@ -29,6 +29,8 @@ class GameScene(BaseScene):
         self.score_font = pygame.font.Font(None, 30)
         self.score = 0
 
+        self.ufo_timer = 0
+
 
     def on_begin(self, **kwargs):
         self.fighter = Fighter()
@@ -127,6 +129,11 @@ class GameScene(BaseScene):
             for alien in self.aliens:
                 alien.direction_x *= -1
                 alien.move(0, 50)
+
+        self.ufo_timer += delta_seconds
+        if 10 < self.ufo_timer:
+            self.ufo_timer = 0
+            print('ufo show')
 
     def on_render(self, surface):
         self.fighter.draw(surface)
