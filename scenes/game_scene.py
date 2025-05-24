@@ -23,9 +23,13 @@ class GameScene(BaseScene):
 
         self.shoot_sound = pygame.mixer.Sound("assets/sounds/shoot.wav")
         self.invaderkilled_sound = pygame.mixer.Sound("assets/sounds/invaderkilled.wav")
+        self.ufo_appear_sound = pygame.mixer.Sound("assets/sounds/ufo_lowpitch.wav")
+        self.ufo_killed_sound = pygame.mixer.Sound("assets/sounds/ufo_highpitch.wav")
         self.explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
         self.shoot_sound.set_volume(0.05)
         self.invaderkilled_sound.set_volume(0.05)
+        self.ufo_appear_sound.set_volume(0.05)
+        self.ufo_killed_sound.set_volume(0.05)
         self.explosion_sound.set_volume(0.05)
 
         self.score_font = pygame.font.Font(None, 30)
@@ -78,15 +82,21 @@ class GameScene(BaseScene):
                 self.score -= 1
                 print('score', self.score)
             else:
-                alien = beam.check_collision(self.aliens)
-                if alien:
-                    self.explosions.append(Explosion(alien.rect))
-                    self.aliens.remove(alien)
+                target = beam.check_collision(self.aliens + self.ufos)
+                if target:
+                    self.explosions.append(Explosion(target.rect))
                     self.beams.remove(beam)
-                    self.invaderkilled_sound.play()
 
-                    self.score += 50
-                    print('score', self.score)
+                    if target in self.aliens:
+                        self.aliens.remove(target)
+                        self.invaderkilled_sound.play()
+
+                        self.score += 50
+                    else:
+                        self.ufos.remove(target)
+                        self.ufo_killed_sound.play()
+
+                        self.score += 1000
 
                     if len(self.aliens) == 0:
                         print("Game Clear")
@@ -118,6 +128,7 @@ class GameScene(BaseScene):
             ufo.x = 0
             ufo.y = 100
             self.ufos.append(ufo)
+            self.ufo_appear_sound.play()
 
         for bomb in self.bombs:
             bomb.update(delta_seconds)
