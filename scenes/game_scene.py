@@ -32,6 +32,7 @@ class GameScene(BaseScene):
 
     def on_begin(self, **kwargs):
         self.fighter = Fighter()
+        self.score = 0
         for y in range(2):  # y: 0, 1
             for x in range(3):  # x: 0, 1, 2
                 alien = Alien()
