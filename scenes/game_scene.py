@@ -1,6 +1,7 @@
 import pygame
 
 from objects.alien import Alien
+from objects.ufo import Ufo
 from objects.fighter import Fighter
 from objects.beam import Beam
 from objects.explosion import Explosion
@@ -16,18 +17,25 @@ class GameScene(BaseScene):
         self.fighter = None
         self.beams = []
         self.aliens = []
+        self.ufos = []
         self.bombs = []
         self.explosions = []
 
         self.shoot_sound = pygame.mixer.Sound("assets/sounds/shoot.wav")
         self.invaderkilled_sound = pygame.mixer.Sound("assets/sounds/invaderkilled.wav")
+        self.ufo_appear_sound = pygame.mixer.Sound("assets/sounds/ufo_lowpitch.wav")
+        self.ufo_killed_sound = pygame.mixer.Sound("assets/sounds/ufo_highpitch.wav")
         self.explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.wav")
         self.shoot_sound.set_volume(0.05)
         self.invaderkilled_sound.set_volume(0.05)
+        self.ufo_appear_sound.set_volume(0.05)
+        self.ufo_killed_sound.set_volume(0.05)
         self.explosion_sound.set_volume(0.05)
 
         self.score_font = pygame.font.Font(None, 30)
         self.score = 0
+
+        self.ufo_timer = 0
 
 
     def on_begin(self, **kwargs):
@@ -44,6 +52,7 @@ class GameScene(BaseScene):
         self.fighter = None
         self.beams.clear()
         self.aliens.clear()
+        self.ufos.clear()
         self.bombs.clear()
         self.explosions.clear()
 
@@ -73,15 +82,21 @@ class GameScene(BaseScene):
                 self.score -= 1
                 print('score', self.score)
             else:
-                alien = beam.check_collision(self.aliens)
-                if alien:
-                    self.explosions.append(Explosion(alien.rect))
-                    self.aliens.remove(alien)
+                target = beam.check_collision(self.aliens + self.ufos)
+                if target:
+                    self.explosions.append(Explosion(target.rect))
                     self.beams.remove(beam)
-                    self.invaderkilled_sound.play()
 
-                    self.score += 50
-                    print('score', self.score)
+                    if target in self.aliens:
+                        self.aliens.remove(target)
+                        self.invaderkilled_sound.play()
+
+                        self.score += 50
+                    else:
+                        self.ufos.remove(target)
+                        self.ufo_killed_sound.play()
+
+                        self.score += 1000
 
                     if len(self.aliens) == 0:
                         print("Game Clear")
@@ -102,6 +117,18 @@ class GameScene(BaseScene):
                 print("Game Over")
                 SceneManager.instance.change("game_over", score=self.score)
                 break
+
+        for ufo in self.ufos:
+            ufo.update(delta_seconds)
+
+        self.ufo_timer += delta_seconds
+        if 10 < self.ufo_timer:
+            self.ufo_timer = 0
+            ufo = Ufo()
+            ufo.x = 0
+            ufo.y = 100
+            self.ufos.append(ufo)
+            self.ufo_appear_sound.play()
 
         for bomb in self.bombs:
             bomb.update(delta_seconds)
@@ -128,6 +155,7 @@ class GameScene(BaseScene):
                 alien.direction_x *= -1
                 alien.move(0, 50)
 
+
     def on_render(self, surface):
         self.fighter.draw(surface)
         for beam in self.beams:
@@ -135,6 +163,9 @@ class GameScene(BaseScene):
 
         for alien in self.aliens:
             alien.draw(surface)
+
+        for ufo in self.ufos:
+            ufo.draw(surface)
 
         for bomb in self.bombs:
             bomb.draw(surface)
