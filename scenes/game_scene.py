@@ -111,6 +111,13 @@ class GameScene(BaseScene):
 
         for bunker in self.bunkers:
             bunker.update(delta_seconds)
+            target = bunker.check_collision(self.bombs + self.beams)
+            if target:
+                if target in self.bombs:
+                    self.bombs.remove(target)
+                elif target in self.beams:
+                    self.beams.remove(target)
+
 
         for alien in self.aliens:
             alien.update(delta_seconds)
