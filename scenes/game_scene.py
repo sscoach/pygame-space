@@ -118,6 +118,10 @@ class GameScene(BaseScene):
                 elif target in self.beams:
                     self.beams.remove(target)
 
+                bunker.hp -= 1
+                if bunker.hp <= 0:
+                    self.bunkers.remove(bunker)
+
 
         for alien in self.aliens:
             alien.update(delta_seconds)

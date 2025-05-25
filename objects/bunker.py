@@ -6,3 +6,5 @@ class Bunker(Object):
 
         self.x = x
         self.y = y
+
+        self.hp = 10
