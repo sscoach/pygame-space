@@ -8,6 +8,8 @@ class Object:
             original_image,
             (original_image.get_width() * 2, original_image.get_height() * 2)
         )
+        self.image = self.image.convert_alpha()
+
         self.x = 0
         self.y = 0
 

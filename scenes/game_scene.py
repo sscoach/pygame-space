@@ -4,6 +4,7 @@ from objects.alien import Alien
 from objects.ufo import Ufo
 from objects.fighter import Fighter
 from objects.beam import Beam
+from objects.bunker import Bunker
 from objects.explosion import Explosion
 
 from constants import *
@@ -16,6 +17,7 @@ class GameScene(BaseScene):
     def __init__(self):
         self.fighter = None
         self.beams = []
+        self.bunkers = []
         self.aliens = []
         self.ufos = []
         self.bombs = []
@@ -48,9 +50,14 @@ class GameScene(BaseScene):
                 alien.x = 70 + 50 * x
                 alien.y = 100 + 70 * y
 
+        for x in range(3):
+            bunker = Bunker(50 + x * 160, SCREEN_HEIGHT - 80)
+            self.bunkers.append(bunker)
+
     def on_end(self):
         self.fighter = None
         self.beams.clear()
+        self.bunkers.clear()
         self.aliens.clear()
         self.ufos.clear()
         self.bombs.clear()
@@ -101,6 +108,21 @@ class GameScene(BaseScene):
                     if len(self.aliens) == 0:
                         print("Game Clear")
                         SceneManager.instance.change("game_over", score=self.score)
+
+        for bunker in self.bunkers:
+            bunker.update(delta_seconds)
+            target = bunker.check_collision(self.bombs + self.beams)
+            if target:
+                if target in self.bombs:
+                    self.bombs.remove(target)
+                elif target in self.beams:
+                    self.beams.remove(target)
+
+                bunker.hp -= 1
+                bunker.make_red()
+                if bunker.hp <= 0:
+                    self.bunkers.remove(bunker)
+
 
         for alien in self.aliens:
             alien.update(delta_seconds)
@@ -160,6 +182,9 @@ class GameScene(BaseScene):
         self.fighter.draw(surface)
         for beam in self.beams:
             beam.draw(surface)
+
+        for bunker in self.bunkers:
+            bunker.draw(surface)
 
         for alien in self.aliens:
             alien.draw(surface)
