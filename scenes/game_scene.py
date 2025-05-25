@@ -119,6 +119,7 @@ class GameScene(BaseScene):
                     self.beams.remove(target)
 
                 bunker.hp -= 1
+                bunker.make_red()
                 if bunker.hp <= 0:
                     self.bunkers.remove(bunker)
 
